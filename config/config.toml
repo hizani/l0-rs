@@ -1,0 +1,15 @@
+[redis]
+host = "127.0.0.1"
+port = 6379
+channel = "chan"
+
+[database]
+host = "localhost"
+port = 5432
+user = "admin"
+pass = "admin"
+db = "l0"
+
+[server]
+host = "127.0.0.1"
+port = 8080
