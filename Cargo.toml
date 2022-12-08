@@ -1,2 +1,7 @@
 [workspace]
 members = ["service", "pub"]
+
+[profile.release]
+strip = true
+lto = true
+panic = "abort"
