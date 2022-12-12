@@ -26,7 +26,7 @@ fn main() -> ExitCode {
             return ExitCode::FAILURE;
         }
     };
-    let contents = contents.replace("\n", "").replace(" ", "");
+    let contents = contents.replace(['\n', ' '], "");
 
     let delivery_count: i32 = match con.publish("chan", contents) {
         Ok(n) => n,
