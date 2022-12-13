@@ -7,7 +7,7 @@ use warp::{hyper::StatusCode, Filter};
 
 use crate::{app::model::OrderModel, config::Config};
 
-use self::{cache::Cache, database::Db};
+use self::{cache::Cache, database::Db, model::Order};
 
 mod cache;
 mod database;
@@ -75,6 +75,7 @@ impl App {
                 self.cache.clone()
             ),
             async move {
+                println!("{}", self.server_socket);
                 warp::serve(filter).run(self.server_socket).await;
                 let result: Result<()> = Err(anyhow::anyhow!("server closed"));
                 result
@@ -127,11 +128,11 @@ async fn handle_get_by_uid(
     cache: Arc<RwLock<Cache>>,
 ) -> Result<impl warp::Reply, warp::Rejection> {
     let cache_lock = cache.read().await;
-    if let Some(order) = cache_lock.get_order_by_uid(&uid) {
+    if let Some(order_model) = cache_lock.get_order_by_uid(&uid) {
+        let order: &Order = order_model.into();
         return Ok(warp::reply::html(format!(
             "<html><h1>{}</h1><p>{:#?}</p></html>",
-            uid,
-            order.data()
+            uid, order
         )));
     }
 

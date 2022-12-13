@@ -35,10 +35,6 @@ impl OrderModel {
     pub fn json(&self) -> &sqlx::types::Json<Order> {
         &self.data
     }
-
-    pub fn data(&self) -> &Order {
-        &self.json().0
-    }
 }
 
 /// Json order model
@@ -63,6 +59,12 @@ pub struct Order {
 impl Uid for Order {
     fn uid(&self) -> &str {
         self.order_uid.as_ref()
+    }
+}
+
+impl<'a> From<&'a OrderModel> for &'a Order {
+    fn from(order_model: &'a OrderModel) -> Self {
+        &order_model.json().0
     }
 }
 
