@@ -1,7 +1,7 @@
 use anyhow::Result;
 use futures_util::StreamExt;
 use redis::Client;
-use std::{collections::HashMap, convert::Infallible, net::SocketAddr, str::FromStr, sync::Arc};
+use std::{convert::Infallible, net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::RwLock;
 use warp::{hyper::StatusCode, Filter};
 
