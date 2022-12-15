@@ -1,7 +1,7 @@
 use anyhow::Result;
 use futures_util::StreamExt;
 use redis::Client;
-use std::{convert::Infallible, net::SocketAddr, str::FromStr, sync::Arc};
+use std::{collections::HashMap, convert::Infallible, net::SocketAddr, str::FromStr, sync::Arc};
 use tokio::sync::RwLock;
 use warp::{hyper::StatusCode, Filter};
 
@@ -58,7 +58,7 @@ impl App {
         })
     }
 
-    pub async fn run(&mut self) -> Result<()> {
+    pub async fn run(self) -> Result<()> {
         // Start server
         let filter = {
             let cache = self.cache.clone();
@@ -69,11 +69,7 @@ impl App {
                 .recover(handle_rejection)
         };
         tokio::try_join!(
-            listen_redis_chan(
-                self.redis_config.clone(),
-                self.db.clone(),
-                self.cache.clone()
-            ),
+            listen_redis_chan(self.redis_config, self.db, self.cache),
             async move {
                 println!("{}", self.server_socket);
                 warp::serve(filter).run(self.server_socket).await;

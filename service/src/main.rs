@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
     let toml = fs::read_to_string(cfgpath)?;
     let cfg = Config::from_str(&toml)?;
 
-    let mut app = App::new(cfg).await?;
+    let app = App::new(cfg).await?;
     app.run().await?;
 
     Ok(())
